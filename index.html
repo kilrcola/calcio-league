@@ -657,6 +657,56 @@
 .help-layer ul { padding-left:18px; }
 .help-layer li { font-size:0.78rem; line-height:1.4; margin-bottom:6px; color:var(--text-main); user-select:text; }
 .help-next { margin-top:10px; text-align:center; background:#1e293b; border-radius:8px; padding:9px; font-size:0.78rem; font-weight:800; color:var(--accent-green); cursor:pointer; }
+
+.sim-tabs { display:flex; align-items:center; gap:4px; padding:6px 10px; background:#090e1a; border-bottom:1px solid #1e293b; flex-shrink:0; }
+.sim-tab { background:#131d31; border:1px solid #1e293b; color:var(--text-muted); padding:6px 10px; border-radius:8px; font-weight:800; font-size:0.68rem; cursor:pointer; }
+.sim-tab.active { border-color:var(--accent-blue); color:var(--accent-blue); background:rgba(56,189,248,0.1); }
+.tab-pos { margin-left:auto; font-size:0.7rem; font-weight:900; color:var(--accent-gold); white-space:nowrap; }
+.sim-footer .action-btn { padding:12px 6px; font-size:0.72rem; }
+.sim-pane .table-box { flex:1 1 auto; }
+.stats-toggle { cursor:pointer; margin-left:8px; font-size:0.9rem; }
+.pitch-wrap { position:relative; width:100%; height:200px; flex-shrink:0; border-radius:10px; overflow:hidden; background:#0b2a17; border:1px solid #152238; }
+#pitch-canvas { width:100%; height:100%; display:block; }
+.pace-chip { position:absolute; top:6px; right:6px; background:rgba(15,23,42,0.85); color:#e2e8f0; border:1px solid #334155; border-radius:8px; font-size:0.62rem; font-weight:800; padding:3px 7px; cursor:pointer; }
+.momentum { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.mom-lbl { font-size:0.55rem; font-weight:900; color:var(--text-muted); width:34px; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mom-track { position:relative; flex:1; height:10px; background:#ef4444; border-radius:6px; overflow:hidden; }
+.mom-fill { position:absolute; left:0; top:0; bottom:0; width:50%; background:#38bdf8; transition:width 0.35s ease; }
+.mom-mid { position:absolute; left:50%; top:0; bottom:0; width:2px; background:rgba(2,6,23,0.7); }
+.opp-chip { font-size:0.64rem; font-weight:800; color:var(--accent-gold); background:#090e1a; border:1px solid #152238; border-radius:8px; padding:5px 8px; cursor:pointer; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.opp-card { margin:10px 14px 0; background:var(--card-bg); border:1px solid #1e293b; border-radius:12px; padding:12px; }
+.opp-card .oc-head { display:flex; align-items:center; gap:10px; }
+.opp-card .oc-badge { font-size:1.8rem; }
+.opp-card .oc-name { font-weight:900; font-size:1rem; }
+.opp-card .oc-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:3px; }
+.opp-card .oc-tag { background:#1e293b; border-radius:8px; padding:2px 8px; font-size:0.66rem; font-weight:800; color:var(--accent-gold); }
+.opp-card .oc-tip { margin-top:8px; font-size:0.74rem; color:var(--text-main); line-height:1.4; }
+.opp-card .oc-tip b { color:var(--accent-green); }
+.result-banner { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(2,6,23,0.72); opacity:0; pointer-events:none; transform:scale(0.8); text-align:center; }
+.result-banner.show { animation:resultPop 2.6s ease forwards; }
+@keyframes resultPop { 0% { opacity:0; transform:scale(0.7); } 12% { opacity:1; transform:scale(1.06); } 20% { transform:scale(1); } 80% { opacity:1; } 100% { opacity:0; transform:scale(1); } }
+.result-banner .rb-big { font-size:2.3rem; font-weight:900; letter-spacing:2px; }
+.result-banner .rb-sub { font-size:0.8rem; font-weight:800; color:#e2e8f0; margin-top:2px; }
+.result-banner.win .rb-big { color:var(--accent-green); } .result-banner.loss .rb-big { color:var(--accent-red); } .result-banner.draw .rb-big { color:var(--accent-gold); }
+.goal-event-line.big { font-size:0.9rem; font-weight:900; border-radius:6px; padding:5px 8px; }
+.goal-event-line.big.user-goal { background:rgba(34,197,94,0.14); }
+.goal-event-line.big.opp-goal { background:rgba(239,68,68,0.14); opacity:1; }
+.log-line.log-red { background:rgba(239,68,68,0.14); border-radius:6px; padding:4px 8px; font-size:0.82rem; }
+.log-line.log-card { background:rgba(253,224,71,0.08); border-radius:6px; padding:3px 8px; }
+.event-log-box { min-height:70px; max-height:none !important; }
+.tour-dim { position:absolute; inset:0; background:rgba(2,6,23,0.78); z-index:350; }
+.tour-ring { position:absolute; border:3px solid var(--accent-gold); border-radius:12px; box-shadow:0 0 0 9999px rgba(2,6,23,0.78); z-index:351; pointer-events:none; transition:all 0.25s ease; }
+.tour-card { position:absolute; left:14px; right:14px; background:var(--card-bg); border:1.5px solid var(--accent-gold); border-radius:12px; padding:12px; z-index:352; font-size:0.8rem; line-height:1.4; }
+.tour-card .tc-step { font-size:0.58rem; font-weight:900; letter-spacing:1px; color:var(--accent-gold); }
+.tour-card .tc-btns { display:flex; gap:8px; margin-top:10px; }
+.menu-btn { width:100%; text-align:left; padding:14px; border-radius:10px; border:1px solid #1e293b; background:var(--card-bg); color:var(--text-main); font-weight:800; font-size:0.85rem; cursor:pointer; margin-bottom:8px; }
+.menu-btn small { display:block; font-weight:600; color:var(--text-muted); font-size:0.66rem; margin-top:2px; }
+.sq-line { font-size:0.6rem; font-weight:900; letter-spacing:1px; color:var(--text-muted); margin:8px 0 4px; }
+.sq-row { display:flex; align-items:center; gap:8px; background:var(--card-bg); border:1px solid #1e293b; border-radius:8px; padding:6px 8px; margin-bottom:4px; font-size:0.74rem; }
+.sq-row .sq-pos { background:#1e293b; border-radius:4px; font-weight:900; font-size:0.62rem; padding:2px 5px; min-width:30px; text-align:center; color:var(--accent-blue); }
+.sq-row .sq-name { flex:1; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sq-row .sq-ovr { font-weight:900; color:var(--accent-gold); }
+.sq-row.out { opacity:0.55; }
 </style>
 
 <div class="mobile-container" id="game-app">
@@ -686,7 +736,7 @@
   <div id="screen-draft" class="screen">
     <header>
       <h1>CALCIO SERIE A 2026/27</h1>
-      <button class="music-toggle-btn" onclick="openHelp()">❓</button>
+      <button class="music-toggle-btn" onclick="openMenu()">☰</button>
       <button class="music-toggle-btn" id="music-toggle-btn-2" onclick="toggleBackgroundMusic()">🎵 MUSIC: OFF</button>
     </header>
 
@@ -784,37 +834,20 @@
   <div id="screen-sim" class="screen">
     <header>
       <h1 id="sim-title">MATCHDAY 1 / 38</h1>
-      <button class="music-toggle-btn" onclick="openHelp()">❓</button>
-      <button class="music-toggle-btn" id="board-btn" onclick="openObjectives()">🎯 BOARD</button>
-      <button class="music-toggle-btn" id="music-toggle-btn-3" onclick="toggleBackgroundMusic()">🎵 MUSIC: OFF</button>
+      <button class="music-toggle-btn" id="board-btn" onclick="openObjectives()">🎯</button>
+      <button class="music-toggle-btn" onclick="openMenu()">☰</button>
+      <button class="music-toggle-btn" id="music-toggle-btn-3" style="display:none;" onclick="toggleBackgroundMusic()">🎵</button>
     </header>
 
-    <div class="tactics-bar" style="padding: 6px 14px;">
-      <span class="chem-label">TACTIC:</span>
-      <button id="sim-tactic-attacking" class="tactic-btn" onclick="setSimTactics('attacking')">⚡ Attacking</button>
-      <button id="sim-tactic-balanced" class="tactic-btn active" onclick="setSimTactics('balanced')">⚖️ Balanced</button>
-      <button id="sim-tactic-defensive" class="tactic-btn" onclick="setSimTactics('defensive')">🛡️ Defensive</button>
-    </div>
-    <div class="style-bar">
-      <span class="chem-label">PRESS:</span>
-      <button class="style-btn" data-kind="press" data-val="low" onclick="setPress('low')">Low</button>
-      <button class="style-btn active" data-kind="press" data-val="mid" onclick="setPress('mid')">Mid</button>
-      <button class="style-btn" data-kind="press" data-val="high" onclick="setPress('high')">High</button>
-      <span class="chem-label" style="margin-left:6px;">WIDTH:</span>
-      <button class="style-btn" data-kind="width" data-val="narrow" onclick="setWidth('narrow')">Narrow</button>
-      <button class="style-btn active" data-kind="width" data-val="normal" onclick="setWidth('normal')">Normal</button>
-      <button class="style-btn" data-kind="width" data-val="wide" onclick="setWidth('wide')">Wide</button>
-    </div>
-<div class="tactic-hint" id="opp-scout" style="display:none; padding: 4px 10px; line-height: 1.35;"></div>
-        <div class="formation-bar">
-      <span class="chem-label">FORMATION:</span>
-      <button class="formation-btn active" data-formation="4-3-3" onclick="setFormation('4-3-3')">4-3-3</button>
-      <button class="formation-btn" data-formation="4-4-2" onclick="setFormation('4-4-2')">4-4-2</button>
-      <button class="formation-btn" data-formation="3-5-2" onclick="setFormation('3-5-2')">3-5-2</button>
-      <button class="formation-btn" data-formation="5-3-2" onclick="setFormation('5-3-2')">5-3-2</button>
+    <div class="sim-tabs">
+      <button class="sim-tab active" data-tab="match" onclick="setSimTab('match')">⚽ MATCH</button>
+      <button class="sim-tab" data-tab="table" onclick="setSimTab('table')">📊 TABLE</button>
+      <button class="sim-tab" data-tab="squad" onclick="setSimTab('squad')">👕 SQUAD</button>
+      <span class="tab-pos" id="tab-pos">#— · 0 pts</span>
     </div>
 
-    <div class="sim-content">
+    <!-- MATCH TAB -->
+    <div class="sim-content sim-pane" id="pane-match">
       <div class="sim-progress-bar">
         <div class="sim-progress-fill" id="sim-progress-fill"></div>
         <div class="sim-countdown-fill" id="sim-countdown-fill"></div>
@@ -823,7 +856,8 @@
       <div class="broadcast-card">
         <div class="broadcast-head">
           <span id="broadcast-round-tag">MATCHDAY 1 OF 38</span>
-          <span id="broadcast-status-tag" style="color:var(--accent-green);">LIVE</span>
+          <span><span id="broadcast-status-tag" style="color:var(--accent-green);">LIVE</span>
+            <span class="stats-toggle" onclick="toggleStats()" title="Match stats">📈</span></span>
         </div>
         <div class="score-board">
           <div class="team-block">
@@ -839,11 +873,24 @@
             <span class="team-name-lbl" id="away-name">Inter</span>
           </div>
         </div>
+
+        <div class="pitch-wrap" id="pitch-wrap">
+          <canvas id="pitch-canvas"></canvas>
+          <button id="pace-btn" class="pace-chip" onclick="cyclePace()">Normal ▶️</button>
+          <div class="result-banner" id="result-banner"></div>
+        </div>
+        <div class="momentum" id="momentum">
+          <span class="mom-lbl" id="mom-lbl-you">YOU</span>
+          <div class="mom-track"><div class="mom-fill" id="mom-fill"></div><div class="mom-mid"></div></div>
+          <span class="mom-lbl" id="mom-lbl-opp">OPP</span>
+        </div>
+        <div class="opp-chip" id="opp-chip" onclick="openTactics()"></div>
+
         <div class="event-log-box" id="match-event-log">
           <span style="color:var(--text-muted); font-size:0.68rem;">Kick-off whistle blows...</span>
         </div>
         <div class="report-card" id="report-card" style="display:none;"></div>
-        <div class="match-stats-panel" id="match-stats-panel">
+        <div class="match-stats-panel" id="match-stats-panel" style="display:none;">
           <div class="stat-row">
             <span class="stat-lbl">Possession</span>
             <span class="stat-val" id="stat-home-pos">—%</span>
@@ -865,14 +912,13 @@
             <span class="stat-val" id="stat-away-cards">—</span>
           </div>
         </div>
-        <div class="bench-strip" id="sim-bench-strip">
-          <span class="bench-strip-label">BENCH:</span>
-          <span id="sim-bench-list">Empty</span>
-        </div>
       </div>
+    </div>
 
+    <!-- TABLE TAB -->
+    <div class="sim-content sim-pane" id="pane-table" style="display:none;">
       <div class="table-box" id="cup-box" style="display:none;"></div>
-      <div class="table-box" id="league-box">
+      <div class="table-box" id="league-box" style="flex:1 1 auto;">
         <div class="table-header-title">
           <span>SERIE A TABLE (🟢 UCL | 🔵 UEL | 🔴 REL)</span>
           <span id="sim-pace-indicator" style="color:var(--accent-gold);">NORMAL</span>
@@ -888,12 +934,56 @@
       </div>
     </div>
 
-    <!-- Updated footer with clean 5s / 15s speed toggle and spacebar pause support -->
-    <div class="footer">
-      <button id="pace-btn" class="action-btn active btn-secondary" onclick="cyclePace()">Normal ▶️</button>
+    <!-- SQUAD TAB -->
+    <div class="sim-content sim-pane" id="pane-squad" style="display:none; overflow-y:auto;">
+      <div id="squad-list"></div>
+      <div class="bench-strip" id="sim-bench-strip">
+        <span class="bench-strip-label">BENCH:</span>
+        <span id="sim-bench-list">Empty</span>
+      </div>
+    </div>
+
+    <div class="footer sim-footer">
+      <button id="tactics-btn" class="action-btn active" onclick="openTactics()">🧭 TACTICS</button>
       <button id="subs-btn" class="action-btn active btn-secondary" onclick="manualOpenSubs()">LINEUP 🔄</button>
       <button id="pause-btn" class="action-btn active btn-secondary" onclick="toggleSimPause(event)">PAUSE ⏸️</button>
-      <button class="action-btn active" onclick="fastForwardSeason()">SIM ⏩</button>
+      <button class="action-btn active btn-secondary" onclick="fastForwardSeason()">SIM ⏩</button>
+    </div>
+
+    <!-- TACTICS PANEL -->
+    <div id="tactics-modal" class="modal-overlay">
+      <div class="modal-header">
+        <h3>🧭 Tactics</h3>
+        <button class="close-modal" onclick="closeTactics()">✕</button>
+      </div>
+      <div class="modal-body" style="padding:0;">
+        <div class="opp-card" id="opp-scout" style="display:none;"></div>
+        <div class="tactics-bar" style="padding: 8px 14px;">
+          <span class="chem-label">TACTIC:</span>
+          <button id="sim-tactic-attacking" class="tactic-btn" onclick="setSimTactics('attacking')">⚡ Attacking</button>
+          <button id="sim-tactic-balanced" class="tactic-btn active" onclick="setSimTactics('balanced')">⚖️ Balanced</button>
+          <button id="sim-tactic-defensive" class="tactic-btn" onclick="setSimTactics('defensive')">🛡️ Defensive</button>
+        </div>
+        <div class="style-bar">
+          <span class="chem-label">PRESS:</span>
+          <button class="style-btn" data-kind="press" data-val="low" onclick="setPress('low')">Low</button>
+          <button class="style-btn active" data-kind="press" data-val="mid" onclick="setPress('mid')">Mid</button>
+          <button class="style-btn" data-kind="press" data-val="high" onclick="setPress('high')">High</button>
+          <span class="chem-label" style="margin-left:6px;">WIDTH:</span>
+          <button class="style-btn" data-kind="width" data-val="narrow" onclick="setWidth('narrow')">Narrow</button>
+          <button class="style-btn active" data-kind="width" data-val="normal" onclick="setWidth('normal')">Normal</button>
+          <button class="style-btn" data-kind="width" data-val="wide" onclick="setWidth('wide')">Wide</button>
+        </div>
+        <div class="formation-bar">
+          <span class="chem-label">FORMATION:</span>
+          <button class="formation-btn active" data-formation="4-3-3" onclick="setFormation('4-3-3')">4-3-3</button>
+          <button class="formation-btn" data-formation="4-4-2" onclick="setFormation('4-4-2')">4-4-2</button>
+          <button class="formation-btn" data-formation="3-5-2" onclick="setFormation('3-5-2')">3-5-2</button>
+          <button class="formation-btn" data-formation="5-3-2" onclick="setFormation('5-3-2')">5-3-2</button>
+        </div>
+        <div class="picker-hint" style="padding:8px 14px;">Changes apply straight away. The match is paused while this panel is open.</div>
+        <div style="padding:0 14px 14px;"><button class="btn-select" style="width:100%;padding:12px;" onclick="closeTactics()">DONE ▶</button></div>
+      </div>
     </div>
 
     <!-- HALFTIME SUB MODAL -->
