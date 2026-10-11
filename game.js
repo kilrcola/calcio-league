@@ -1060,58 +1060,58 @@ function renderBadgePicker() {
 }
 
 const CITY_PREFIXES = [
-"Campobasso", "Torino", "Bergamo", "Lecce", "Parma",
-    "Siena", "Verona", "Padova", "Trieste", "Taranto",
-    "Como", "Mantova", "Cremonese", "Reggio", "Catania",
-    "Palermo", "Cagliari", "Ancona", "Perugia", "Terni",
-    "La Spezia", "Bolzano", "Aosta", "Salerno", "Bari",
-    "Pescara", "Modena", "Ferrara", "Ravenna", "Rimini",
-    "Pisa", "Lucca", "Arezzo", "Livorno", "Napoli",
-    "Genova", "Udine", "Brescia", "Vicenza", "Treviso",
-    "Frosinone", "Latina", "Cosenza", "Catanzaro", "Sassari",
-    "Olbia", "Potenza", "Viterbo", "Brindisi", "Milano",
-    "Roma", "Firenze", "Venezia", "Bologna", "Alessandria",
-    "Novara", "Vercelli", "Biella", "Verbania", "Savona",
-    "Imperia", "La Maddalena", "Trento", "Belluno", "Rovigo",
-    "Gorizia", "Pordenone", "Piacenza", "Reggio Emilia", "Asti",
-    "Cuneo", "Sondrio", "Lecco", " Varese", "Massa",
-    "Grosseto", "Prato", "Pistoia", "Forlì", "Cesena",
-    "Ascoli Piceno", "Macerata", "Chieti", "Isernia", "Avellino",
-    "Benevento", "Caserta", "Foggia", "Barletta", "Matera",
-    "Trani", "Enna", "Ragusa", "Siracusa", "Trapani",
-    "Messina", "Nuoro", "Oristano", "Carbonia", "L'Aquila"
+  "Campobasso", "Torino", "Bergamo", "Lecce", "Parma",
+  "Siena", "Verona", "Padova", "Trieste", "Taranto",
+  "Como", "Mantova", "Cremonese", "Reggio", "Catania",
+  "Palermo", "Cagliari", "Ancona", "Perugia", "Terni",
+  "La Spezia", "Bolzano", "Aosta", "Salerno", "Bari",
+  "Pescara", "Modena", "Ferrara", "Ravenna", "Rimini",
+  "Pisa", "Lucca", "Arezzo", "Livorno", "Napoli",
+  "Genova", "Udine", "Brescia", "Vicenza", "Treviso",
+  "Frosinone", "Latina", "Cosenza", "Catanzaro", "Sassari",
+  "Olbia", "Potenza", "Viterbo", "Brindisi", "Milano",
+  "Roma", "Firenze", "Venezia", "Bologna", "Alessandria",
+  "Novara", "Vercelli", "Biella", "Verbania", "Savona",
+  "Imperia", "La Maddalena", "Trento", "Belluno", "Rovigo",
+  "Gorizia", "Pordenone", "Piacenza", "Reggio Emilia", "Asti",
+  "Cuneo", "Sondrio", "Lecco", "Varese", "Massa",
+  "Grosseto", "Prato", "Pistoia", "Forlì", "Cesena",
+  "Ascoli Piceno", "Macerata", "Chieti", "Isernia", "Avellino",
+  "Benevento", "Caserta", "Foggia", "Barletta", "Matera",
+  "Trani", "Enna", "Ragusa", "Siracusa", "Trapani",
+  "Messina", "Nuoro", "Oristano", "Carbonia", "L'Aquila"
 ];
 
 const CLUB_SUFFIXES = [
-    "United", "City", "Rovers", "Wanderers", "Athletic",
-    "Atlético", "Sporting", "Dynamo", "Real", "Rangers",
-    "Albion", "Town", "FC", "SC", "Sports",
-    "Club", "Football", "Olympique", "Olympic", "Inter",
-    # Animals/Nature (20)
-    "Lions", "Eagles", "Wolves", "Foxes", "Bulls",
-    "Hawks", "Dragons", "Bears", "Falcons", "Sharks",
-    "Panthers", "Tigers", "Lynx", "Hounds", "Cubs",
-    "Phoenix", "Griffins", "Hyenas", "Vipers", "Cobras",
-    # Prestige/Power (20)
-    "Royal", "Imperial", "Crown", "Kings", "Titans",
-    "Legends", "Champions", "Elite", "Premier", "Sovereign",
-    "Monarchs", "Dynasty", "Empire", "Noble", "Grand",
-    "Supreme", "Apex", "Zenith", "Prime", "Alpha",
-    # Colors/Identity (20)
-    "Reds", "Blues", "Whites", "Blacks", "Gold",
-    "Silver", "Scarlet", "Azure", "Crimson", "Iron",
-    "Steel", "Granite", "Tide", "Summit", "Storm",
-    "Thunder", "Lightning", "Fire", "Ice", "Shadow",
-    # Geography/Nature (20)
-    "Valley", "Heights", "Harbor", "Forest", "Meadows",
-    "Mount", "Hills", "Coast", "Beach", "River",
-    "Stream", "Lake", "Peak", "Cliff", "Cove",
-    "Bay", "Shore", "Delta", "Grove", "Ridge",
-    # Modern/Abstract (20)
-    "Cosmos", "Stars", "Nova", "Blaze", "Vanguard",
-    "Pioneers", "Legion", "Phalanx", "Vikings", "Gladiators",
-    "Warriors", "Sparks", "Flames", "Riders", "Knights",
-    "Barons", "Dukes", "Earls", "Marquis", "Count"	
+  "United", "City", "Rovers", "Wanderers", "Athletic",
+  "Atlético", "Sporting", "Dynamo", "Real", "Rangers",
+  "Albion", "Town", "FC", "SC", "Sports",
+  "Club", "Football", "Olympique", "Olympic", "Inter",
+  // Animals/Nature (20)
+  "Lions", "Eagles", "Wolves", "Foxes", "Bulls",
+  "Hawks", "Dragons", "Bears", "Falcons", "Sharks",
+  "Panthers", "Tigers", "Lynx", "Hounds", "Cubs",
+  "Phoenix", "Griffins", "Hyenas", "Vipers", "Cobras",
+  // Prestige/Power (20)
+  "Royal", "Imperial", "Crown", "Kings", "Titans",
+  "Legends", "Champions", "Elite", "Premier", "Sovereign",
+  "Monarchs", "Dynasty", "Empire", "Noble", "Grand",
+  "Supreme", "Apex", "Zenith", "Prime", "Alpha",
+  // Colors/Identity (20)
+  "Reds", "Blues", "Whites", "Blacks", "Gold",
+  "Silver", "Scarlet", "Azure", "Crimson", "Iron",
+  "Steel", "Granite", "Tide", "Summit", "Storm",
+  "Thunder", "Lightning", "Fire", "Ice", "Shadow",
+  // Geography/Nature (20)
+  "Valley", "Heights", "Harbor", "Forest", "Meadows",
+  "Mount", "Hills", "Coast", "Beach", "River",
+  "Stream", "Lake", "Peak", "Cliff", "Cove",
+  "Bay", "Shore", "Delta", "Grove", "Ridge",
+  // Modern/Abstract (20)
+  "Cosmos", "Stars", "Nova", "Blaze", "Vanguard",
+  "Pioneers", "Legion", "Phalanx", "Vikings", "Gladiators",
+  "Warriors", "Sparks", "Flames", "Riders", "Knights",
+  "Barons", "Dukes", "Earls", "Marquis", "Count"
 ];
 
 const NAME_STYLES = [
