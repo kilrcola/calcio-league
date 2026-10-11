@@ -663,12 +663,13 @@ let simInterval = null;
 let isSimPaused = false;
 
 // Updated to 2 cleaner presets (5s and 15s)
-let currentPaceIdx = 0;
+let currentPaceIdx = 1;   // 0 Fast, 1 Normal, 2 Slow
 const paceOptions = [
-  { label: "FAST: 5s ⚡",    ms: 5000 },
-  { label: "SLOW: 15s ⏱️",  ms: 15000 }
+  { label: "FAST: 5s ⚡",     ms: 5000 },
+  { label: "NORMAL: 9s ▶️",   ms: 9000 },
+  { label: "SLOW: 15s ⏱️",   ms: 15000 }
 ];
-const paceShortLabels = ["5s ⚡", "15s ⏱️"];
+const paceShortLabels = ["Fast ⚡", "Normal ▶️", "Slow ⏱️"];
 
 let userSquadGoals = {};
 let userMatchGoals = {};
@@ -808,7 +809,7 @@ function resumeActiveCampaign() {
     currentTactic = saved.currentTactic || 'balanced';
     currentFormation = saved.currentFormation || '4-3-3';
     window.__lastHarmonyBonus = saved.harmonyBonus || 1.0;
-    if (typeof saved.paceIdx === 'number') currentPaceIdx = saved.paceIdx;
+    if (typeof saved.paceIdx === 'number' && saved.paceIdx < paceOptions.length) currentPaceIdx = saved.paceIdx;
 
     renderPitchForFormation();
     updateFormationButtons();
@@ -4502,4 +4503,101 @@ function updateScoutLine() {
   if (!st) { el.style.display = 'none'; return; }
   el.style.display = 'block';
   el.innerHTML = `${liveMatch ? 'Now' : 'Next'}: <b>${t.name}</b> · ${st.label} — ${st.tip}`;
+}
+
+// ===========================================================================
+// HELP: one scrollable page per layer of the game
+// ===========================================================================
+const HELP_LAYERS = [
+  { icon: '🧩', title: 'Drafting', short: 'Build your XI before the season.', items: [
+    'Pick <b>11 starters + 3 bench</b> players from real Serie A 2026/27 squads. Each has a position, an <b>OVR</b> (rating) and a price.',
+    '<b>Budget cap:</b> €500M (Tight Budget mode is €400M). Every Board Trust level adds €5M, up to +€20M.',
+    '<b>Formation:</b> 4-3-3, 4-4-2, 3-5-2 or 5-3-2. It decides how many players you need in each line.',
+    '<b>Out of position:</b> a neighbouring position costs 4 OVR (e.g. a ST on the wing), an unrelated one costs 10, and a keeper outfield (or the reverse) costs 30.',
+    '<b>Chemistry:</b> 3, 4 or 5+ players from the same club gives +3%, +5% or +7% to the whole team.',
+    '<b>Efficiency bonus:</b> unspent budget gives up to +8%.',
+    '<b>Captain ©:</b> +2 OVR for him and about +1% for the team. He also takes your penalties.',
+    '<b>💎 Best value:</b> marks the top 12% of players for rating-per-price.',
+    '<b>🧬 Traits:</b> most players carry one (shown as a chip). It only works when he plays in his natural position.',
+    '<b>Draft tools:</b> search, sort, filters, and ⚖ Compare for two players side by side.'
+  ]},
+  { icon: '🎮', title: 'Challenge modes', short: 'Optional rule twists, set on the start screen.', items: [
+    '<b>Standard:</b> the normal game.',
+    '<b>Tight Budget:</b> €400M cap.',
+    '<b>Mixed XI:</b> at most 2 players from the same club.',
+    '<b>Bargain Bin:</b> every player must cost €30M or less.',
+    '<b>Iron Manager:</b> no pausing, manual subs or tactic changes once the season starts.',
+    '<b>Titan League:</b> every AI club is +3 stronger.'
+  ]},
+  { icon: '📊', title: 'Team ratings', short: 'How your lineup becomes numbers.', items: [
+    'Your XI becomes three lines: <b>ATK</b> (front three), <b>MID</b> (the CMs) and <b>DEF</b> (back four + keeper). The keeper also counts separately as <b>GK</b>.',
+    '<b>Form:</b> recent match ratings (the 🟩/🟥 badges) raise or lower a player\'s OVR.',
+    'Flat adjustments: <b>tactic</b> (±4), <b>press</b> (±1.5 DEF), <b>width</b> (±1 MID), <b>formation</b> shape, <b>trait</b> bonuses, and the <b>matchup</b> against the opponent\'s style.',
+    '<b>Home side:</b> +1.5 to every line.',
+    '<b>Red card:</b> −7% on every line for each red.',
+    'Rough value of a point: +1 ATK or DEF is about 2% more (or fewer) chances. +1 MID is about 1.5% more possession.'
+  ]},
+  { icon: '🧭', title: 'Tactics and scouting', short: 'Read the opponent and set up to beat them.', items: [
+    '<b>Tactic:</b> Attacking is +4 ATK and −4 DEF. Defensive is the reverse.',
+    '<b>Press:</b> High, Mid or Low. High press means more possession and fewer chances against you, but weaker DEF and more yellow cards.',
+    '<b>Width:</b> Narrow, Normal or Wide. Wide favours your wingers, narrow favours your CMs.',
+    '<b>AI styles:</b> every club has a fixed style: Possession, Counter-attack, Physical or High press. Each prefers certain formations.',
+    '<b>Scouting line:</b> your next opponent\'s style and the best way to beat it is shown above the formation bar.',
+    '<b>Matchup:</b> the right formation, press and width against a style gives a bonus. The wrong ones cost you. The report card shows it with a 🧩 row.',
+    '<b>AI adapts at half-time only:</b> behind, it pushes forward. Ahead by 2+, it shuts up shop.',
+    'The <b>match report</b> shows the opponent\'s formation and style, so you can remember them for next time.'
+  ]},
+  { icon: '⚽', title: 'The match engine', short: 'What happens minute by minute.', items: [
+    'A match is about <b>95 one-minute ticks</b>: 45 + added time in each half.',
+    '<b>Possession</b> follows the MID gap (kept between 30% and 70%).',
+    '<b>Chances</b> come from possession and your ATK against their DEF.',
+    '<b>Goals:</b> each chance is more likely to score with a better shooter, and less likely against a better keeper or defence. Penalties are about 2.5% of chances.',
+    '<b>Who shoots:</b> mostly strikers, then wingers, CMs and defenders.',
+    '<b>Game state:</b> a team that is behind late pushes forward. A team that is ahead eases off.',
+    '<b>VAR</b> reviews some goals and overturns a few.',
+    '<b>Derbies:</b> each team has a rival. Derbies add a few extra chances and pull the two teams\' ratings closer together.',
+    '<b>Half-time popup:</b> appears only if you\'re losing by 2+ or 3 starters are in poor form.'
+  ]},
+  { icon: '🟥', title: 'Cards, injuries and bans', short: 'Why your XI changes during the season.', items: [
+    '<b>Yellows:</b> about 2% per side per minute. A player who is already booked is much less likely to be booked again.',
+    '<b>Reds:</b> a second yellow, or a rare straight red. About 2–3 a season for your side.',
+    '<b>Bans:</b> a red means 1 match out. A 5th yellow over the season means 1 match out, then the count resets.',
+    '<b>Injuries:</b> 1–5 matches out, most often 1.',
+    '<b>Subs:</b> 3 per match, live. Forced injury subs also happen automatically.',
+    '<b>Squad news:</b> a popup appears before a match if starters are unavailable. If you ignore it, they are auto-swapped.'
+  ]},
+  { icon: '📅', title: 'The season', short: 'How a campaign runs.', items: [
+    '<b>38 matches</b> against 19 clubs, home and away. 3 points for a win, 1 for a draw.',
+    'After every match a <b>report card</b> appears. Tap Continue when you\'re ready.',
+    'The season <b>auto-saves</b> after each match and resumes if you close the game.',
+    '<b>Fast-forward</b> skips the rest of the season.',
+    'The <b>speed button</b> at the bottom cycles Fast, Normal and Slow, which sets how long each match takes to play out.'
+  ]},
+  { icon: '🏛', title: 'Objectives, trust and rewards', short: 'Goals beyond the league table.', items: [
+    '<b>Board objectives:</b> a main finishing target (+2 trust) and three random side objectives (+1 each), plus a bonus for beating the target by a lot. Tap 🎯 BOARD to see progress.',
+    '<b>Board Trust:</b> every 4 points is a level, worth +€5M budget in future drafts (up to level 4). It carries over between seasons.',
+    '<b>Achievements:</b> unlocks such as comebacks, hat-tricks, unbeaten seasons and the Scudetto.',
+    '<b>Europe:</b> after the season the top 4 enter the Champions League (4 knockout rounds). 5th and 6th enter the Europa League (3 rounds). Matches are single legs with penalties if level.',
+    '<b>Season rating and grade:</b> a score out of 100 with a tier grade, plus a career history list.'
+  ]}
+];
+
+function openHelp() {
+  try { AudioFX.playClick(); } catch (e) {}
+  const nav = HELP_LAYERS.map((l, i) => `<a class="help-chip" onclick="helpJump(${i})">${l.icon}</a>`).join('');
+  const pages = HELP_LAYERS.map((l, i) => `
+    <section class="help-layer" id="help-layer-${i}">
+      <div class="help-step">PAGE ${i + 1} OF ${HELP_LAYERS.length}</div>
+      <h4>${l.icon} ${l.title}</h4>
+      <div class="help-short">${l.short}</div>
+      <ul>${l.items.map(t => `<li>${t}</li>`).join('')}</ul>
+      ${i < HELP_LAYERS.length - 1 ? `<div class="help-next" onclick="helpJump(${i + 1})">Next: ${HELP_LAYERS[i + 1].icon} ${HELP_LAYERS[i + 1].title} ▼</div>`
+                                   : `<div class="help-next" onclick="closeOverlay('help-modal')">✅ That's everything. Back to the game</div>`}
+    </section>`).join('');
+  openOverlay('help-modal', '❓ How to Play', `<div class="help-nav">${nav}</div><div class="help-scroll" id="help-scroll">${pages}</div>`);
+}
+
+function helpJump(i) {
+  const el = document.getElementById('help-layer-' + i);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }

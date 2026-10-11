@@ -647,6 +647,16 @@
 .trait-line { display:flex; flex-wrap:wrap; gap:4px; align-items:center; margin-top:2px; }
 .trait-chip { background:#1e293b; border:1px solid #334155; color:#fbbf24; font-size:0.62rem; font-weight:800; padding:1px 6px; border-radius:8px; white-space:nowrap; }
 .trait-desc { font-size:0.58rem; color:var(--text-muted); white-space:normal; line-height:1.25; }
+
+.help-nav { display:flex; gap:6px; justify-content:center; padding:6px 0 10px; position:sticky; top:0; background:var(--bg-dark); z-index:2; }
+.help-chip { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:4px 8px; font-size:0.9rem; cursor:pointer; }
+.help-layer { background:var(--card-bg); border:1px solid #1e293b; border-radius:12px; padding:14px; margin-bottom:12px; scroll-margin-top:44px; }
+.help-step { font-size:0.6rem; font-weight:900; letter-spacing:1px; color:var(--accent-gold); }
+.help-layer h4 { font-size:1.05rem; margin:2px 0; color:var(--accent-blue); }
+.help-short { font-size:0.74rem; color:var(--text-muted); margin-bottom:8px; }
+.help-layer ul { padding-left:18px; }
+.help-layer li { font-size:0.78rem; line-height:1.4; margin-bottom:6px; color:var(--text-main); user-select:text; }
+.help-next { margin-top:10px; text-align:center; background:#1e293b; border-radius:8px; padding:9px; font-size:0.78rem; font-weight:800; color:var(--accent-green); cursor:pointer; }
 </style>
 
 <div class="mobile-container" id="game-app">
@@ -657,6 +667,7 @@
   <div id="screen-start" class="screen active">
     <header>
       <h1>CALCIO LEAGUE</h1>
+      <button class="music-toggle-btn" onclick="openHelp()">❓ HELP</button>
       <button class="music-toggle-btn" id="music-toggle-btn" onclick="toggleBackgroundMusic()">🎵 MUSIC: OFF</button>
     </header>
     <div class="start-screen-content">
@@ -664,8 +675,9 @@
       <button class="resume-save-btn" id="resume-save-btn" onclick="resumeActiveCampaign()">RESUME SAVED SEASON ⚡</button>
       <div class="start-extras">
         <button class="mini-start-btn" id="mode-btn" onclick="openModeModal()">🎮 MODE: STANDARD</button>
+        <button class="mini-start-btn" onclick="openHelp()">❓ HOW TO PLAY</button>
         <button class="mini-start-btn" onclick="openAchievements()">🏆 ACHIEVEMENTS</button>
-        <div id="trust-line" class="picker-hint" style="text-align:center;margin-top:6px;"></div>
+        
       </div>
     </div>
   </div>
@@ -674,6 +686,7 @@
   <div id="screen-draft" class="screen">
     <header>
       <h1>CALCIO SERIE A 2026/27</h1>
+      <button class="music-toggle-btn" onclick="openHelp()">❓</button>
       <button class="music-toggle-btn" id="music-toggle-btn-2" onclick="toggleBackgroundMusic()">🎵 MUSIC: OFF</button>
     </header>
 
@@ -771,6 +784,7 @@
   <div id="screen-sim" class="screen">
     <header>
       <h1 id="sim-title">MATCHDAY 1 / 38</h1>
+      <button class="music-toggle-btn" onclick="openHelp()">❓</button>
       <button class="music-toggle-btn" id="board-btn" onclick="openObjectives()">🎯 BOARD</button>
       <button class="music-toggle-btn" id="music-toggle-btn-3" onclick="toggleBackgroundMusic()">🎵 MUSIC: OFF</button>
     </header>
@@ -861,7 +875,7 @@
       <div class="table-box" id="league-box">
         <div class="table-header-title">
           <span>SERIE A TABLE (🟢 UCL | 🔵 UEL | 🔴 REL)</span>
-          <span id="sim-pace-indicator" style="color:var(--accent-gold);">FAST</span>
+          <span id="sim-pace-indicator" style="color:var(--accent-gold);">NORMAL</span>
         </div>
         <div class="table-scroll">
           <table>
@@ -876,7 +890,7 @@
 
     <!-- Updated footer with clean 5s / 15s speed toggle and spacebar pause support -->
     <div class="footer">
-      <button id="pace-btn" class="action-btn active btn-secondary" onclick="cyclePace()">5s ⚡</button>
+      <button id="pace-btn" class="action-btn active btn-secondary" onclick="cyclePace()">Normal ▶️</button>
       <button id="subs-btn" class="action-btn active btn-secondary" onclick="manualOpenSubs()">LINEUP 🔄</button>
       <button id="pause-btn" class="action-btn active btn-secondary" onclick="toggleSimPause(event)">PAUSE ⏸️</button>
       <button class="action-btn active" onclick="fastForwardSeason()">SIM ⏩</button>
