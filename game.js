@@ -3038,7 +3038,20 @@ function showPostSeason() {
     valueGrade: valueRating.grade,
     valueSavings: Math.round(valueRating.savings),
     squadValue: squadValue,
-    squad: Object.values(squad).map(p => p ? `${p.pos}: ${p.name} (${p.ovr})` : '')
+    squad: Object.values(squad).map(p => p ? `${p.pos}: ${p.name} (${p.ovr})` : ''),
+    gf: u.gf, ga: u.ga, gd: u.gf - u.ga, ppg: pointsPerGame, winPct: winPct,
+    title: titleText, rankNum: userRank,
+    captain: captainName() || '', captainGoals: userSquadGoals[captainName()] || 0,
+    motm: topMotm.n ? `${topMotm.name} (${topMotm.n}x)` : '',
+    mode: currentChallenge().icon + ' ' + currentChallenge().name,
+    formation: currentFormation,
+    xi: (FORMATIONS[currentFormation] || FORMATIONS['4-3-3']).rows.map(row => row.map(k => {
+      const p = squad[k]; if (!p) return null;
+      const t = traitOf(p);
+      return { name: p.name, pos: p.pos, ovr: p.ovr, trait: t ? t.icon : '' };
+    })),
+    objDone: objectives ? objectiveStatus(true).filter(o => o.main ? o.done : (o.done && !o.failed)).length : 0,
+    objTotal: objectives ? objectives.extras.length + 1 : 0
   };
 
   let seasonCount = 1;
@@ -3119,39 +3132,147 @@ function saveAndRenderCareerHistory(newEntry) {
   document.getElementById('career-season-count').innerText = `${history.length} SEASON${history.length !== 1 ? 'S' : ''}`;
 }
 
+function isMobileDevice() {
+  const ua = navigator.userAgent || '';
+  return /Android|iPhone|iPad|iPod/i.test(ua) || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua));
+}
+
+function shareText(d) {
+  return `⚽ CALCIO LEAGUE 2026/27 ⚽\n${d.badge} ${d.name}\nFinished ${d.rank} · ${d.pts} pts · ${d.record}\n` +
+    `⭐ Season Rating: ${d.rating} (${d.grade})\n🥇 Top Scorer: ${d.topScorer}\n#CalcioGame #SerieA`;
+}
+
+function europeLineForShare() {
+  if (!cup || !cup.finished) return '';
+  const name = cup.comp === 'UCL' ? 'Champions League' : 'Europa League';
+  if (cup.champion) return `🏆 ${name.toUpperCase()} WINNERS`;
+  return `🌍 ${name}: out in the ${cup.eliminatedIn || 'knockouts'}`;
+}
+
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+
+// Draws a 1080x1920 story-format card. Keeps key content inside the Instagram/Snapchat safe zone (y 230..1690).
+function renderShareCanvas(d) {
+  const W = 1080, H = 1920;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  const font = (w, px) => `${w} ${px}px -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
+  const gold = d.rankNum === 1 ? '#fbbf24' : (d.rankNum <= 4 ? '#38bdf8' : '#94a3b8');
+
+  const bg = g.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#0b1220'); bg.addColorStop(0.5, '#0f2a1d'); bg.addColorStop(1, '#070b14');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  // pitch lines
+  g.strokeStyle = 'rgba(255,255,255,0.05)'; g.lineWidth = 6;
+  g.strokeRect(60, 300, W - 120, H - 600);
+  g.beginPath(); g.moveTo(60, H / 2); g.lineTo(W - 60, H / 2); g.stroke();
+  g.beginPath(); g.arc(W / 2, H / 2, 150, 0, Math.PI * 2); g.stroke();
+
+  g.textAlign = 'center';
+  g.fillStyle = '#38bdf8'; g.font = font('900', 44); g.fillText('CALCIO LEAGUE 2026/27', W / 2, 290);
+
+  g.font = font('400', 150); g.fillStyle = '#fff';
+  const cupEmoji = d.rankNum === 1 ? '🏆' : d.rankNum === 2 ? '🥈' : d.rankNum === 3 ? '🥉' : '🏅';
+  g.fillText(cupEmoji, W / 2, 450);
+  g.fillStyle = gold; g.font = font('900', 58);
+  const title = (d.title || '').replace(/[🥇🥈🥉🏆🎖️🏅]/gu, '').trim();
+  g.fillText(title, W / 2, 540);
+
+  g.fillStyle = '#fff'; g.font = font('800', 56); g.fillText(`${d.badge} ${d.name}`, W / 2, 630);
+
+  // grade strip
+  rr(g, 90, 680, W - 180, 190, 28); g.fillStyle = 'rgba(15,23,42,0.85)'; g.fill(); g.lineWidth = 5; g.strokeStyle = gold; g.stroke();
+  const cols = [['SEASON RATING', String(d.rating)], ['TIER GRADE', String(d.grade)], ['VALUE', String(d.valueGrade)]];
+  cols.forEach((col, i) => {
+    const x = 90 + (W - 180) * (i + 0.5) / 3;
+    g.fillStyle = '#38bdf8'; g.font = font('900', 80); g.fillText(col[1], x, 790);
+    g.fillStyle = '#94a3b8'; g.font = font('800', 24); g.fillText(col[0], x, 835);
+  });
+
+  // stat grid
+  const stats = [['POSITION', d.rank], ['POINTS', String(d.pts)], ['RECORD', d.record],
+                 ['GOALS FOR', String(d.gf)], ['GOALS AGAINST', String(d.ga)], ['GOAL DIFF', (d.gd >= 0 ? '+' : '') + d.gd]];
+  stats.forEach((st, i) => {
+    const col = i % 3, row = Math.floor(i / 3);
+    const x = 90 + (W - 180) * (col + 0.5) / 3, y = 940 + row * 125;
+    g.fillStyle = '#fff'; g.font = font('900', 50); g.fillText(st[1], x, y + 40);
+    g.fillStyle = '#94a3b8'; g.font = font('800', 22); g.fillText(st[0], x, y + 76);
+  });
+
+  // lines of text
+  let y = 1215;
+  const line = (txt, color) => { g.fillStyle = color || '#e2e8f0'; g.font = font('800', 34); g.fillText(txt, W / 2, y); y += 52; };
+  line(`🥇 Top scorer: ${d.topScorer}`);
+  if (d.captain && d.captainGoals > 0) line(`© Captain ${d.captain}: ${d.captainGoals} goals`);
+  if (d.objTotal) line(`🎯 Board objectives: ${d.objDone} of ${d.objTotal}`, '#fbbf24');
+  const eu = europeLineForShare(); if (eu) line(eu, '#38bdf8');
+
+  // XI by line (attack at top)
+  y = Math.max(y + 20, 1420);
+  g.fillStyle = '#94a3b8'; g.font = font('900', 24); g.fillText(`STARTING XI · ${d.formation}`, W / 2, y); y += 48;
+  (d.xi || []).forEach(row => {
+    const names = row.filter(Boolean);
+    g.font = font('800', 30); g.fillStyle = '#e2e8f0';
+    const txt = names.map(p => `${p.trait ? p.trait + ' ' : ''}${p.name}`).join('   ·   ');
+    let size = 30; while (g.measureText(txt).width > W - 140 && size > 20) { size--; g.font = font('800', size); }
+    g.fillText(txt, W / 2, y); y += 46;
+  });
+
+  g.fillStyle = '#fbbf24'; g.font = font('900', 36); g.fillText('Think you can beat it?', W / 2, 1745);
+  g.fillStyle = '#64748b'; g.font = font('700', 26);
+  g.fillText((location.protocol.startsWith('http') ? location.host + location.pathname.replace(/index\.html$/, '') : 'Calcio League'), W / 2, 1790);
+  return c;
+}
+
+let _shareBlob = null, _shareUrl = null;
+
 function shareToStory() {
   AudioFX.playClick();
   const d = latestShareData;
-  if (!d || !d.name) {
-    alert("No season data to share yet.");
-    return;
-  }
+  if (!d || !d.name) { alert("No season data to share yet."); return; }
+  let canvas;
+  try { canvas = renderShareCanvas(d); } catch (e) { openShareModal(shareText(d)); return; }
+  const finish = (blob) => {
+    if (!blob) { openShareModal(shareText(d)); return; }
+    if (_shareUrl) URL.revokeObjectURL(_shareUrl);
+    _shareBlob = blob; _shareUrl = URL.createObjectURL(blob);
+    openShareImageModal(d);
+  };
+  try { canvas.toBlob(finish, 'image/png'); } catch (e) { openShareModal(shareText(d)); }
+}
 
-  const text =
-    `⚽ CALCIO SERIE A 2026/27 ⚽\n` +
-    `${d.badge} ${d.name}\n` +
-    `Finished ${d.rank} · ${d.pts} pts · ${d.record}\n` +
-    `⭐ Season Rating: ${d.rating} (${d.grade})\n` +
-    `💰 Value Grade: ${d.valueGrade} · Saved €${d.valueSavings}M\n` +
-    `🥇 Top Scorer: ${d.topScorer}\n` +
-    `#CalcioGame #SerieA`;
+function openShareImageModal(d) {
+  closeOverlay('share-img-modal');
+  const canNative = isMobileDevice() && navigator.share && navigator.canShare &&
+    navigator.canShare({ files: [new File([_shareBlob], 'calcio-season.png', { type: 'image/png' })] });
+  const body = `
+    <div style="text-align:center;">
+      <img src="${_shareUrl}" alt="Season card" style="max-width:100%;max-height:52vh;border-radius:12px;border:1px solid #1e293b;">
+      <div class="picker-hint" style="margin:8px 0;">${canNative ? 'Tap Share, then pick Instagram or Snapchat Stories.' : 'Save the image, then post it to your story or send it to a mate.'}</div>
+      <div style="display:flex;gap:8px;">
+        ${canNative ? `<button class="btn-select" style="flex:1;padding:12px;" onclick="shareImageNative()">📤 SHARE</button>` : ''}
+        <button class="btn-select" style="flex:1;padding:12px;background:${canNative ? '#334155' : 'var(--accent-green)'};" onclick="downloadShareImage()">⬇ SAVE IMAGE</button>
+      </div>
+      <button class="btn-select" style="width:100%;margin-top:8px;padding:10px;background:#1e293b;color:#fff;" onclick="openShareModal(shareText(latestShareData))">📋 Share as text instead</button>
+    </div>`;
+  openOverlay('share-img-modal', '📸 Share Your Season', body);
+}
 
-  if (navigator.share) {
-    navigator.share({ title: 'My Calcio Season', text })
-      .catch(err => {
-        if (err && err.name !== 'AbortError') openShareModal(text);
-      });
-    return;
-  }
+function shareImageNative() {
+  AudioFX.playClick();
+  const file = new File([_shareBlob], 'calcio-season.png', { type: 'image/png' });
+  navigator.share({ files: [file], title: 'My Calcio Season', text: shareText(latestShareData) })
+    .catch(err => { if (err && err.name !== 'AbortError') downloadShareImage(); });
+}
 
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text)
-      .then(() => openShareModal(text, "Copied to clipboard!"))
-      .catch(() => openShareModal(text));
-    return;
-  }
-
-  openShareModal(text);
+function downloadShareImage() {
+  AudioFX.playClick();
+  const a = document.createElement('a');
+  a.href = _shareUrl; a.download = 'calcio-season.png';
+  document.body.appendChild(a); a.click(); a.remove();
 }
 
 function openShareModal(text, note) {
